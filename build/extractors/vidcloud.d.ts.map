@@ -1,0 +1,1 @@
+{"version":3,"file":"vidcloud.d.ts","sourceRoot":"","sources":["../../src/extractors/vidcloud.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,YAAY,EAAE,MAAM,gBAAgB,CAAC;AAG9C,cAAM,QAAQ;IACV,SAAS,CAAC,UAAU,SAAc;IAClC,OAAO,CAAC,QAAQ,CAAC,IAAI,CAA2B;IAChD,OAAO,CAAC,QAAQ,CAAC,KAAK,CAA8B;IAEpD,OAAO,aAAoB,GAAG,kBAAiB,OAAO,KAAW,QAAQ,YAAY,CAAC,CAoDrF;CACJ;AAED,eAAe,QAAQ,CAAC"}
