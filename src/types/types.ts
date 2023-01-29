@@ -130,3 +130,11 @@ export interface IVideoResult {
     sources: IVideo[],
     subtiles: ISubtile[],
 }
+
+export interface IMovieSection {
+    trendingMovies: IMovieResult[],
+    trendingTVShows: IMovieResult[],
+    latestMovies: IMovieResult[],
+    latestTvShows: IMovieResult[],
+    commingSoon: IMovieResult[],
+}
