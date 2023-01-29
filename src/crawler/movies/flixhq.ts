@@ -62,9 +62,9 @@ class FlixHQ {
             });
 
             // Movie Section
-            const movieListSelector = '.block_area-content.film_list > .film_list-wrap > .flw-item';
-            const trendingMovieSelector = `.tab-content > #trending-movies > ${movieListSelector}`;
-            const trendingTvShowSelector = `.tab-content > #trending-tv > ${movieListSelector}`;
+            const moviesListSelector = '.block_area-content.film_list > .film_list-wrap > .flw-item';
+            const trendingMoviesSelector = `.tab-content > #trending-movies > ${moviesListSelector}`;
+            const trendingTvShowSelector = `.tab-content > #trending-tv > ${moviesListSelector}`;
 
             $('.block_area.block_area_home').each((_, el) => {
                 const title = $(el).find('h2.cat-heading').text();
@@ -72,7 +72,7 @@ class FlixHQ {
                 switch (title) {
                     case MovieReport.TRENDING:
                         // Trending Movies
-                        $(el).find(trendingMovieSelector).each((_, el) => {
+                        $(el).find(trendingMoviesSelector).each((_, el) => {
                             trendingMovies.push(setMovieData($, el, this.baseUrl));
                         });
 
@@ -92,6 +92,7 @@ class FlixHQ {
 
                     case MovieReport.COMING_SOON:
                         commingSoon.push(setMovieData($, el, this.baseUrl));
+                        break;
 
                     default:
                         break;
