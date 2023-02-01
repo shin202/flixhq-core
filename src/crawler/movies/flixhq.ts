@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AnyNode, Cheerio, CheerioAPI, load } from "cheerio";
-import { Filter, FilterStrings, ICountry, IEpisodeServer, IGenre, IHomeResult, IMovieEpisode, IMovieInfo, IMovieResult, IMovieSection, ISearch, ISlider, MovieReport, MovieType, MovieTypeStrings, StreamingServers, StreamingServersStrings } from "../../types/types";
+import { Filter, FilterStrings, ICountry, IEpisodeServer, IGenre, IHomeResult, IMovieEpisode, IMovieFilter, IMovieInfo, IMovieResult, IMovieSection, ISearch, ISlider, MovieReport, MovieType, MovieTypeStrings, StreamingServers, StreamingServersStrings } from "../../types/types";
 import { setMovieData, setMovieInfo } from "../../utils";
 import { MixDrop, VidCloud } from '../../extractors';
 
@@ -122,7 +122,6 @@ class FlixHQ {
 
         try {
             const { data } = await axios.get(`${this.baseUrl}/home`);
-
             const $ = load(data);
 
             const genreSelector = '#header_menu > .header_menu-list > .nav-item:contains("Genre") > .header_menu-sub > .sub-menu > li';
@@ -144,7 +143,6 @@ class FlixHQ {
 
         try {
             const { data } = await axios.get(`${this.baseUrl}/home`);
-
             const $ = load(data);
 
             const countrySelector = '#header_menu > .header_menu-list > .nav-item:contains("Country") > .header_menu-sub > .sub-menu > li';
@@ -179,7 +177,7 @@ class FlixHQ {
             const { data } = await axios.get(`${this.baseUrl}/${Filter[filterBy]}/${query}?page=${page}`);
             const $ = load(data);
 
-            const navSelector = '.pre-pagination:nth-child(1) > nav > ul';
+            const navSelector = '.pre-pagination > nav > ul';
             filterResult.hasNextPage = $(navSelector).length > 0 ? !$(navSelector).children().last().hasClass('active') : false;
 
             $('.film_list-wrap > .flw-item').each((_, el) => {
@@ -209,7 +207,7 @@ class FlixHQ {
             const { data } = await axios.get(`${this.baseUrl}/${MovieType[type]}?page=${page}`);
             const $ = load(data);
 
-            const navSelector = '.pre-pagination:nth-child(1) > nav > ul';
+            const navSelector = '.pre-pagination > nav > ul';
             filterResult.hasNextPage = $(navSelector).length > 0 ? !$(navSelector).children().last().hasClass('active') : false;
 
             $('.film_list-wrap > .flw-item').each((_, el) => {
@@ -239,7 +237,7 @@ class FlixHQ {
             const { data } = await axios.get(`${this.baseUrl}/top-imdb?type=${type === 'ALL' ? 'all' : MovieType[type!]}&page=${page}`);
             const $ = load(data);
 
-            const navSelector = '.pre-pagination:nth-child(1) > nav > ul';
+            const navSelector = '.pre-pagination > nav > ul';
             filterResult.hasNextPage = $(navSelector).length > 0 ? !$(navSelector).children().last().hasClass('active') : false;
 
             $('.film_list-wrap > .flw-item').each((_, el) => {
@@ -275,15 +273,15 @@ class FlixHQ {
     }
 
     private fetchTvShowEpisodeInfo = async (seasonId: string, currentSeason: number, episodes: IMovieEpisode[]): Promise<void> => {
-        const $$$ = await this.fetchTvShowEpisodes(seasonId);
+        const $ = await this.fetchTvShowEpisodes(seasonId);
 
-        $$$(`.nav > .nav-item`).map((_, el) => {
+        $(`.nav > .nav-item`).map((_, el) => {
             const episode: IMovieEpisode = {
-                id: $$$(el).find('a').attr('data-id')!,
-                title: $$$(el).find('a').attr('title')!,
-                episode: parseInt($$$(el).find('a').attr('title')!.split(':')[0].slice(3).trim()),
+                id: $(el).find('a').attr('data-id')!,
+                title: $(el).find('a').attr('title')!,
+                episode: parseInt($(el).find('a').attr('title')!.split(':')[0].slice(3).trim()),
                 season: currentSeason,
-                url: `${this.baseUrl}/ajax/v2/episode/servers/${$$$(el).find('a').attr('data-id')}`,
+                url: `${this.baseUrl}/ajax/v2/episode/servers/${$(el).find('a').attr('data-id')}`,
             }
 
             episodes.push(episode);
@@ -291,10 +289,10 @@ class FlixHQ {
     }
 
     private fetchTvShowSeasonInfo = async (uid: string, episodes: IMovieEpisode[]): Promise<void> => {
-        const $$ = await this.fetchTvShowSeasons(uid);
+        const $ = await this.fetchTvShowSeasons(uid);
 
-        const seasondsIds = $$('.slt-seasons-dropdown > .dropdown-menu > a')
-            .map((_, el) => $$(el)
+        const seasondsIds = $('.slt-seasons-dropdown > .dropdown-menu > a')
+            .map((_, el) => $(el)
                 .attr('data-id'))
             .get();
 
@@ -445,7 +443,7 @@ class FlixHQ {
             const { data } = await axios.get(`${this.baseUrl}/search/${query}?page=${page}`);
             const $ = load(data);
 
-            const navSelector = '.pre-pagination:nth-child(1) > nav > ul';
+            const navSelector = '.pre-pagination > nav > ul';
             searchResult.hasNextPage = $(navSelector).length > 0 ? !$(navSelector).children().last().hasClass('active') : false;
 
             $('.film_list-wrap > .flw-item').each((_, el) => {
@@ -453,6 +451,105 @@ class FlixHQ {
             });
 
             return searchResult;
+        } catch (err) {
+            throw new Error((err as Error).message);
+        }
+    }
+
+    fetchFiltersList = async (): Promise<IMovieFilter> => {
+        const filtersList: IMovieFilter = {
+            types: [],
+            qualities: [],
+            releaseYear: [],
+            genres: [],
+            countries: []
+        };
+        const { types = [], qualities = [], releaseYear = [], genres = [], countries = [] } = filtersList;
+
+        try {
+            const { data } = await axios.get(`${this.baseUrl}/movie`);
+            const $ = load(data);
+
+            const filterWrapper = '.category_filter-content';
+            const typeSelector = `${filterWrapper} .row > div:nth-child(1) > .cfc-item > .ni-list > .form-check`;
+            const qualitySelector = `${filterWrapper} .row > div:nth-child(2) > .cfc-item > .ni-list > .form-check`;
+            const releaseSelector = `${filterWrapper} .row > div:nth-child(3) > .cfc-item > .ni-list > .form-check`;
+            const genreSelector = `${filterWrapper} > div:nth-child(2) > .ni-list > .form-check`;
+            const countrySelector = `${filterWrapper} > div:nth-child(3) > .ni-list > .form-check`;
+
+            $(typeSelector).each((_, el) => {
+                types.push({
+                    label: $(el).find('input').attr('value')!,
+                    value: $(el).find('input').attr('value')!,
+                });
+            });
+
+            $(qualitySelector).each((_, el) => {
+                qualities.push({
+                    label: $(el).find('input').attr('value')!,
+                    value: $(el).find('input').attr('value')!,
+                });
+            });
+
+            $(releaseSelector).each((_, el) => {
+                releaseYear.push({
+                    label: $(el).find('input').attr('value')!,
+                    value: $(el).find('input').attr('value')!,
+                });
+            });
+
+            $(genreSelector).each((_, el) => {
+                genres.push({
+                    label: $(el).find('label').text(),
+                    value: parseInt($(el).find('input').attr('value')!),
+                });
+            });
+
+            $(countrySelector).each((_, el) => {
+                countries.push({
+                    label: $(el).find('label').text(),
+                    value: parseInt($(el).find('input').attr('value')!),
+                });
+            });
+
+            return filtersList;
+        } catch (err) {
+            throw new Error((err as Error).message);
+        }
+    }
+
+    filter = async (options: IMovieFilter, page: number = 1): Promise<ISearch<IMovieResult>> => {
+        const { type = 'all', quality = 'all', released = 'all', genre = 'all', country = 'all' } = options;
+        const filterResult: ISearch<IMovieResult> = {
+            currentPage: page,
+            hasNextPage: false,
+            results: [],
+        }
+
+        try {
+            const reqParams = {
+                type,
+                quality,
+                release_year: released,
+                genre: Array.isArray(genre) ? genre.join('-') : 'all',
+                country: Array.isArray(country) ? country.join('-') : 'all',
+            }
+
+            const { data } = await axios.get(`${this.baseUrl}/filter`, {
+                params: {
+                    ...reqParams,
+                }
+            });
+            const $ = load(data);
+
+            const navSelector = '.pre-pagination > nav > ul';
+            filterResult.hasNextPage = $(navSelector).length > 0 ? !$(navSelector).children().last().hasClass('active') : false;
+
+            $('.film_list-wrap > .flw-item').each((_, el) => {
+                filterResult.results.push(setMovieData($(el), this.baseUrl));
+            });
+
+            return filterResult;
         } catch (err) {
             throw new Error((err as Error).message);
         }

@@ -138,3 +138,17 @@ export interface IMovieSection {
     latestTvShows: IMovieResult[],
     commingSoon: IMovieResult[],
 }
+
+export interface IItem {
+    label: string,
+    value: string|number,
+}
+
+export interface IMovieFilter {
+    genres?: IItem[],
+    countries?: IItem[], 
+    types?: IItem[];
+    qualities?: IItem[],
+    releaseYear?: IItem[],
+    [x: string]: unknown,
+}
