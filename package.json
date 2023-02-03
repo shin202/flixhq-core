@@ -1,16 +1,25 @@
 {
   "name": "movies-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Nodejs library that provides an Api for obtaining the movies information from FlixHQ website.",
+  "main": "build/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "test": "nodemon test/index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "api",
+    "crawler",
+    "library",
+    "movies",
+    "core",
+    "apis",
+    "nodejs",
+    "movies-api"
+  ],
+  "author": "Shin",
+  "license": "MIT",
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",
     "nodemon": "^2.0.20",
