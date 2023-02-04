@@ -57,13 +57,19 @@ class FlixHQ {
                     this.fetchTrendingTvShows($(el), trendingTvShowSelector, trendingTVShows);
                     break;
                 case types_1.MovieReport.LATEST_MOVIE:
-                    latestMovies.push((0, utils_1.setMovieData)($(el), this.baseUrl));
+                    $(el).find(moviesListSelector).each((_, el) => {
+                        latestMovies.push((0, utils_1.setMovieData)($(el), this.baseUrl));
+                    });
                     break;
                 case types_1.MovieReport.LATEST_TV_SHOWS:
-                    latestTvShows.push((0, utils_1.setMovieData)($(el), this.baseUrl));
+                    $(el).find(moviesListSelector).each((_, el) => {
+                        latestTvShows.push((0, utils_1.setMovieData)($(el), this.baseUrl));
+                    });
                     break;
                 case types_1.MovieReport.COMING_SOON:
-                    commingSoon.push((0, utils_1.setMovieData)($(el), this.baseUrl));
+                    $(el).find(moviesListSelector).each((_, el) => {
+                        commingSoon.push((0, utils_1.setMovieData)($(el), this.baseUrl));
+                    });
                     break;
                 default:
                     break;
