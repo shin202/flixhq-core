@@ -26,7 +26,7 @@ Install with npm
 - [fetchMovieByType](#fetchmoviebytype)
 - [fetchMovieByTopIMDB](#fetchmoviebytopimdb)
 - [fetchMovieInfo](#fetchmovieinfo)
-- [fetchEpisodeServers](#fetchepisodeserver)
+- [fetchEpisodeServers](#fetchepisodeservers)
 - [fetchEpisodeSources](#fetchepisodesources)
 - [search](#search)
 - [fetchFiltersList](#fetchfilterslist)
