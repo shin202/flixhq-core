@@ -42,7 +42,7 @@ export const setMovieInfo = ($: CheerioAPI, movieInfo: IMovieInfo, baseUrl: stri
     movieInfo.cover = match[1];
     movieInfo.image = $('.m_i-d-poster > .film-poster > img:nth-child(1)').attr('src')!;
     movieInfo.description = $('.m_i-d-content > .description').text();
-    movieInfo.releaseData = $('.m_i-d-content > .elements > .row-line:nth-child(3)').text().replace('Released: ', '').trim();
+    movieInfo.releaseDate = $('.m_i-d-content > .elements > .row-line:nth-child(3)').text().replace('Released: ', '').trim();
     movieInfo.type = movieInfo.id.split('/')[0] === 'movie' ? MovieType.MOVIE : MovieType.TVSERIES;
     movieInfo.country = {
         title: $('.m_i-d-content > .elements > .row-line:nth-child(1) > a').attr('title')!,
