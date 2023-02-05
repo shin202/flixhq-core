@@ -45,7 +45,7 @@ class FlixHQ {
         });
     };
     fetchMovieSections = ($, options) => {
-        const { trendingMovies, trendingTVShows, latestTvShows, latestMovies, commingSoon } = options;
+        const { trendingMovies, trendingTVShows, latestTvShows, latestMovies, comingSoon } = options;
         const moviesListSelector = '.block_area-content.film_list > .film_list-wrap > .flw-item';
         const trendingMoviesSelector = `.tab-content > #trending-movies > ${moviesListSelector}`;
         const trendingTvShowSelector = `.tab-content > #trending-tv > ${moviesListSelector}`;
@@ -68,7 +68,7 @@ class FlixHQ {
                     break;
                 case types_1.MovieReport.COMING_SOON:
                     $(el).find(moviesListSelector).each((_, el) => {
-                        commingSoon.push((0, utils_1.setMovieData)($(el), this.baseUrl));
+                        comingSoon.push((0, utils_1.setMovieData)($(el), this.baseUrl));
                     });
                     break;
                 default:
@@ -86,11 +86,17 @@ class FlixHQ {
                 },
                 latestTvShows: [],
                 latestMovies: [],
-                commingSoon: [],
+                comingSoon: [],
             }
         };
-        const { slider, moviesSection: { trending: { trendingMovies, trendingTVShows, }, latestTvShows, latestMovies, commingSoon } } = homeResult;
-        const movieSections = { trendingMovies, trendingTVShows, latestTvShows, latestMovies, commingSoon };
+        const { slider, moviesSection: { trending: { trendingMovies, trendingTVShows, }, latestTvShows, latestMovies, comingSoon } } = homeResult;
+        const movieSections = {
+            trendingMovies,
+            trendingTVShows,
+            latestTvShows,
+            latestMovies,
+            comingSoon: comingSoon
+        };
         try {
             const { data } = await axios_1.default.get(`${this.baseUrl}/home`);
             const $ = (0, cheerio_1.load)(data);
@@ -152,7 +158,7 @@ class FlixHQ {
             results: [],
         };
         try {
-            const { data } = await axios_1.default.get(`${this.baseUrl}/${types_1.Filter[filterBy]}/${query}?page=${page}`);
+            const { data } = await axios_1.default.get(`${this.baseUrl}/${filterBy}/${query}?page=${page}`);
             const $ = (0, cheerio_1.load)(data);
             const navSelector = '.pre-pagination > nav > ul';
             filterResult.hasNextPage = $(navSelector).length > 0 ? !$(navSelector).children().last().hasClass('active') : false;
@@ -178,7 +184,7 @@ class FlixHQ {
             results: [],
         };
         try {
-            const { data } = await axios_1.default.get(`${this.baseUrl}/${types_1.MovieType[type]}?page=${page}`);
+            const { data } = await axios_1.default.get(`${this.baseUrl}/${types_1.MovieType}?page=${page}`);
             const $ = (0, cheerio_1.load)(data);
             const navSelector = '.pre-pagination > nav > ul';
             filterResult.hasNextPage = $(navSelector).length > 0 ? !$(navSelector).children().last().hasClass('active') : false;
@@ -204,7 +210,7 @@ class FlixHQ {
             results: [],
         };
         try {
-            const { data } = await axios_1.default.get(`${this.baseUrl}/top-imdb?type=${type === 'ALL' ? 'all' : types_1.MovieType[type]}&page=${page}`);
+            const { data } = await axios_1.default.get(`${this.baseUrl}/top-imdb?type=${type}&page=${page}`);
             const $ = (0, cheerio_1.load)(data);
             const navSelector = '.pre-pagination > nav > ul';
             filterResult.hasNextPage = $(navSelector).length > 0 ? !$(navSelector).children().last().hasClass('active') : false;
@@ -220,8 +226,7 @@ class FlixHQ {
     fetchTvShowSeasons = async (id) => {
         try {
             const { data } = await axios_1.default.get(`${this.baseUrl}/ajax/v2/tv/seasons/${id}`);
-            const $ = (0, cheerio_1.load)(data);
-            return $;
+            return (0, cheerio_1.load)(data);
         }
         catch (err) {
             throw new Error(err.message);
@@ -230,8 +235,7 @@ class FlixHQ {
     fetchTvShowEpisodes = async (seasonsId) => {
         try {
             const { data } = await axios_1.default.get(`${this.baseUrl}/ajax/v2/season/episodes/${seasonsId}`);
-            const $ = (0, cheerio_1.load)(data);
-            return $;
+            return (0, cheerio_1.load)(data);
         }
         catch (err) {
             throw new Error(err.message);
@@ -252,12 +256,12 @@ class FlixHQ {
     };
     fetchTvShowSeasonInfo = async (uid, episodes) => {
         const $ = await this.fetchTvShowSeasons(uid);
-        const seasondsIds = $('.slt-seasons-dropdown > .dropdown-menu > a')
+        const seasonIds = $('.slt-seasons-dropdown > .dropdown-menu > a')
             .map((_, el) => $(el)
             .attr('data-id'))
             .get();
         let currentSeason = 1;
-        for (const id of seasondsIds) {
+        for (const id of seasonIds) {
             await this.fetchTvShowEpisodeInfo(id, currentSeason, episodes);
             currentSeason++;
         }
@@ -324,7 +328,7 @@ class FlixHQ {
             throw new Error(err.message);
         }
     };
-    fetchEpisodeSources = async (mediaId, episodeId, server = 'UpCloud') => {
+    fetchEpisodeSources = async (mediaId, episodeId, server = types_1.StreamingServers.VidCloud) => {
         if (episodeId.startsWith('http')) {
             const serverUrl = new URL(episodeId);
             switch (server) {
@@ -361,9 +365,8 @@ class FlixHQ {
         try {
             const servers = await this.fetchEpisodeServers(mediaId, episodeId);
             const i = servers.findIndex(s => s.name === server);
-            if (i === -1) {
+            if (i === -1)
                 throw new Error(`Server ${server} not found.`);
-            }
             // Send request to the streaming server to get the video url.
             const { data } = await axios_1.default.get(`${this.baseUrl}/ajax/sources/${servers[i].id}`);
             const serverUrl = new URL(data.link);

@@ -5,6 +5,7 @@ var MovieType;
 (function (MovieType) {
     MovieType["MOVIE"] = "movie";
     MovieType["TVSERIES"] = "tv-show";
+    MovieType["ALL"] = "all";
 })(MovieType = exports.MovieType || (exports.MovieType = {}));
 var MovieReport;
 (function (MovieReport) {
@@ -21,7 +22,7 @@ var Filter;
 var StreamingServers;
 (function (StreamingServers) {
     StreamingServers["UpCloud"] = "UpCloud";
-    StreamingServers["VidCloud"] = "VidCloud";
+    StreamingServers["VidCloud"] = "Vidcloud";
     StreamingServers["MixDrop"] = "MixDrop";
 })(StreamingServers = exports.StreamingServers || (exports.StreamingServers = {}));
 //# sourceMappingURL=types.js.map

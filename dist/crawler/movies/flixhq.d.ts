@@ -1,4 +1,4 @@
-import { FilterStrings, ICountry, IEpisodeServer, IGenre, IHomeResult, IMovieFilter, IMovieInfo, IMovieResult, ISearch, MovieType, MovieTypeStrings, StreamingServersStrings } from "../../types/types";
+import { Filter, ICountry, IEpisodeServer, IGenre, IHomeResult, IMovieFilter, IMovieInfo, IMovieResult, ISearch, MovieType, StreamingServers } from "../../types/types";
 declare class FlixHQ {
     readonly name = "FlixHQ";
     protected baseUrl: string;
@@ -18,21 +18,21 @@ declare class FlixHQ {
      * @param page
      * @returns
      */
-    fetchMovieByGenreOrCountry: (filterBy: FilterStrings, query: string, page?: number) => Promise<ISearch<IMovieResult>>;
+    fetchMovieByGenreOrCountry: (filterBy: Filter, query: string, page?: number) => Promise<ISearch<IMovieResult>>;
     /**
      *
      * @param type Type of the video (MOVIE or TVSERIES)
      * @param page
      * @returns
      */
-    fetchMovieByType: (type: MovieTypeStrings, page?: number) => Promise<ISearch<IMovieResult>>;
+    fetchMovieByType: (type: MovieType, page?: number) => Promise<ISearch<IMovieResult>>;
     /**
      *
      * @param type
      * @param page
      * @returns
      */
-    fetchMovieByTopIMDB: (type?: MovieTypeStrings | 'ALL', page?: number) => Promise<ISearch<IMovieResult>>;
+    fetchMovieByTopIMDB: (type: MovieType, page?: number) => Promise<ISearch<IMovieResult>>;
     private fetchTvShowSeasons;
     private fetchTvShowEpisodes;
     private fetchTvShowEpisodeInfo;
@@ -45,7 +45,7 @@ declare class FlixHQ {
      */
     fetchMovieInfo: (mediaId: string) => Promise<IMovieInfo>;
     fetchEpisodeServers: (mediaId: string, episodeId: string) => Promise<IEpisodeServer[]>;
-    fetchEpisodeSources: (mediaId: string, episodeId: string, server?: StreamingServersStrings) => Promise<any>;
+    fetchEpisodeSources: (mediaId: string, episodeId: string, server?: StreamingServers) => Promise<any>;
     search: (query: string, page?: number) => Promise<ISearch<IMovieResult>>;
     fetchFiltersList: () => Promise<IMovieFilter>;
     filter: (options: IMovieFilter, page?: number) => Promise<ISearch<IMovieResult>>;
