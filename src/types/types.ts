@@ -1,9 +1,8 @@
 export enum MovieType {
     MOVIE = 'movie',
     TVSERIES = 'tv-show',
+    ALL = 'all',
 }
-
-export type MovieTypeStrings = keyof typeof MovieType;
 
 export enum MovieReport {
     TRENDING = 'Trending',
@@ -17,15 +16,11 @@ export enum Filter {
     COUNTRY = 'country',
 }
 
-export type FilterStrings = keyof typeof Filter;
-
 export enum StreamingServers {
     UpCloud = 'UpCloud',
-    VidCloud = 'VidCloud',
+    VidCloud = 'Vidcloud',
     MixDrop = 'MixDrop',
 }
-
-export type StreamingServersStrings = keyof typeof StreamingServers;
 
 export interface ISliderDetail {
     quality: string,
@@ -60,7 +55,7 @@ export interface IHomeResult {
         },
         latestMovies: IMovieResult[],
         latestTvShows: IMovieResult[],
-        commingSoon: IMovieResult[],
+        comingSoon: IMovieResult[],
     }
 }
 
@@ -136,7 +131,7 @@ export interface IMovieSection {
     trendingTVShows: IMovieResult[],
     latestMovies: IMovieResult[],
     latestTvShows: IMovieResult[],
-    commingSoon: IMovieResult[],
+    comingSoon: IMovieResult[],
 }
 
 export interface IItem {
