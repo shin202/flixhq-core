@@ -46,7 +46,7 @@ export const setMovieInfo = ($: CheerioAPI, movieInfo: IMovieInfo, baseUrl: stri
     movieInfo.type = movieInfo.id.split('/')[0] === 'movie' ? MovieType.MOVIE : MovieType.TVSERIES;
     movieInfo.country = {
         title: $('.m_i-d-content > .elements > .row-line:nth-child(1) > a').attr('title')!,
-        url: $('.m_i-d-content > .elements > .row-line:nth-child(1) > a').attr('href')!.slice(1),
+        url: $('.m_i-d-content > .elements > .row-line:nth-child(1) > a').attr('href')?.slice(1)!,
     };
     movieInfo.genres = $('.m_i-d-content > .elements > .row-line:nth-child(2) > a')
         .map((_, el) => $(el).attr('title')).get();
