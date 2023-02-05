@@ -1,6 +1,6 @@
 {
   "name": "flixhq-core",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Nodejs library that provides an Api for obtaining the movies information from FlixHQ website.",
   "main": "dist/index.js",
   "scripts": {
