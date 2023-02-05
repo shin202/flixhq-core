@@ -316,7 +316,7 @@ class FlixHQ {
             const $ = (0, cheerio_1.load)(data);
             const servers = $('.nav > .nav-item').map((_, el) => {
                 const server = {
-                    id: $(el).find('a').attr('data-linkid'),
+                    id: mediaId.includes('movie') ? $(el).find('a').attr('data-linkid') : $(el).find('a').attr('data-id'),
                     name: $(el).find('a').find('span').text(),
                     url: `${this.baseUrl}${$(el).find('a').attr('href')}`,
                 };
