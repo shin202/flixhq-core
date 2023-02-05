@@ -74,37 +74,37 @@ flixhq.fetchCountriesList().then(data => console.log(data));
 returns a promise which resolves into an array of countries. (*[`Promise<ICountry[]>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L68-L72)*).
 
 ### fetchMovieByCountryOrGenre
-| Parameter | Type                                                                                     | Description |
-| --------- |------------------------------------------------------------------------------------------| ----------- |
-| filterBy  | [`Filters`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L14-L17) | Accept: "GENRE" or "COUNTRY". |
+| Parameter | Type                                                                                     | Description                                                                                                            |
+| --------- |------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| filterBy  | [`Filters`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L14-L17) | Accept: "GENRE" or "COUNTRY".                                                                                          |
 | query | string                                                                                   | query that depend on the `filterBy` parameter. (*genre or country that can be found in the genres or countries list*). |
-| page (optional) | number                                                                                   | page number (*default: 1*). |
+| page (optional) | number                                                                                   | page number (*default: 1*).                                                                                            |
 
 ```ts
 // Promise:
-flixhq.fetchMovieByCountryOrGenre("COUNTRY", "US").then(data => console.log(data));
+flixhq.fetchMovieByCountryOrGenre(Filter.COUNTRY, "US").then(data => console.log(data));
 
 // Async/Await:
 (async () => {
-    const data = await flixhq.fetchMovieByCountryOrGenre("COUNTRY", "US");
+    const data = await flixhq.fetchMovieByCountryOrGenre(Filter.COUNTRY, "US");
     console.log(data);
 })();
 ```
 returns a promise which resolves into an array of movies/tvseries. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L74-L80)*).
 
 ### fetchMovieByType
-| Parameter | Type                                                                                     | Description |
-| --------- |------------------------------------------------------------------------------------------| ----------- |
+| Parameter | Type                                                                                     | Description                    |
+| --------- |------------------------------------------------------------------------------------------|--------------------------------|
 | type      | [`MovieType`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L1-L5) | Accept: "MOVIE" or "TVSERIES". |
-| page (optional) | number                                                                                   | page number (default: 1). |
+| page (optional) | number                                                                                   | page number (default: 1).      |
 
 ```ts
 // Promise:
-flixhq.fetchMovieByType("MOVIE").then(data => console.log(data));
+flixhq.fetchMovieByType(MovieType.MOVIE).then(data => console.log(data));
 
 // Async/Await:
 (async () => {
-    const data = await flixhq.fetchMovieByType("MOVIE");
+    const data = await flixhq.fetchMovieByType(MovieType.MOVIE);
     console.log(data);
 })();
 ```
