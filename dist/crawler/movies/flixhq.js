@@ -184,7 +184,7 @@ class FlixHQ {
             results: [],
         };
         try {
-            const { data } = await axios_1.default.get(`${this.baseUrl}/${types_1.MovieType}?page=${page}`);
+            const { data } = await axios_1.default.get(`${this.baseUrl}/${type}?page=${page}`);
             const $ = (0, cheerio_1.load)(data);
             const navSelector = '.pre-pagination > nav > ul';
             filterResult.hasNextPage = $(navSelector).length > 0 ? !$(navSelector).children().last().hasClass('active') : false;
@@ -328,7 +328,7 @@ class FlixHQ {
             throw new Error(err.message);
         }
     };
-    fetchEpisodeSources = async (mediaId, episodeId, server = types_1.StreamingServers.VidCloud) => {
+    fetchEpisodeSources = async (mediaId, episodeId, server = types_1.StreamingServers.UpCloud) => {
         if (episodeId.startsWith('http')) {
             const serverUrl = new URL(episodeId);
             switch (server) {
