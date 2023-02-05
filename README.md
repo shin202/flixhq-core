@@ -45,7 +45,7 @@ flixhq.home().then(data => console.log(data));
     console.log(data);
 })();
 ```
-returns a promise which resolves into an object. (*[`Promise<IHomeResult>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L54-L65)*).
+returns a promise which resolves into an object. (*[`Promise<IHomeResult>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L49-L60)*).
 
 ### fetchGenresList
 ```ts
@@ -58,7 +58,7 @@ flixhq.fetchGenresList().then(data => console.log(data));
     console.log(data);
 })();
 ```
-returns a promise which resolves into an array of genres. (*[`Promise<IGenre[]>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L67-L71)*).
+returns a promise which resolves into an array of genres. (*[`Promise<IGenre[]>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L62-L67)*).
 
 ### fetchCountriesList
 ```ts
@@ -71,14 +71,14 @@ flixhq.fetchCountriesList().then(data => console.log(data));
     console.log(data);
 })();
 ```
-returns a promise which resolves into an array of countries. (*[`Promise<ICountry[]>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L73-L77)*).
+returns a promise which resolves into an array of countries. (*[`Promise<ICountry[]>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L68-L72)*).
 
 ### fetchMovieByCountryOrGenre
-| Parameter | Type          | Description |
-| --------- | ------------- | ----------- |
-| filterBy  | [`FilterStrings`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L15-L20) | Accept: "GENRE" or "COUNTRY". |
-| query | string | query that depend on the `filterBy` parameter. (*genre or country that can be found in the genres or countries list*). |
-| page (optional) | number | page number (*default: 1*). |
+| Parameter | Type                                                                                     | Description |
+| --------- |------------------------------------------------------------------------------------------| ----------- |
+| filterBy  | [`Filters`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L14-L17) | Accept: "GENRE" or "COUNTRY". |
+| query | string                                                                                   | query that depend on the `filterBy` parameter. (*genre or country that can be found in the genres or countries list*). |
+| page (optional) | number                                                                                   | page number (*default: 1*). |
 
 ```ts
 // Promise:
@@ -90,13 +90,13 @@ flixhq.fetchMovieByCountryOrGenre("COUNTRY", "US").then(data => console.log(data
     console.log(data);
 })();
 ```
-returns a promise which resolves into an array of movies/tvseries. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L79-L85)*).
+returns a promise which resolves into an array of movies/tvseries. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L74-L80)*).
 
 ### fetchMovieByType
-| Parameter | Type | Description |
-| --------- | ---- | ----------- |
-| type      | [`MovieTypeStrings`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L1-L6) | Accept: "MOVIE" or "TVSERIES". |
-| page (optional) | number | page number (default: 1). |
+| Parameter | Type                                                                                     | Description |
+| --------- |------------------------------------------------------------------------------------------| ----------- |
+| type      | [`MovieType`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L1-L5) | Accept: "MOVIE" or "TVSERIES". |
+| page (optional) | number                                                                                   | page number (default: 1). |
 
 ```ts
 // Promise:
@@ -108,13 +108,13 @@ flixhq.fetchMovieByType("MOVIE").then(data => console.log(data));
     console.log(data);
 })();
 ```
-returns a promise which resolves into an array of movies. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L79-L85)*).
+returns a promise which resolves into an array of movies. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L74-L80)*).
 
 ### fetchMovieByTopIMDB
-| Parameter | Type | Description |
-| --------- | ---- | ----------- |
-| type (optional) | [`MovieTypeStrings`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L1-L6) | Accept: "MOVIE" or "TVSERIES" (default: "ALL"). |
-| page (optional) | number | page number (default: 1). |
+| Parameter | Type                                                                                     | Description |
+| --------- |------------------------------------------------------------------------------------------| ----------- |
+| type (optional) | [`MovieType`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L1-L5) | Accept: "MOVIE" or "TVSERIES" (default: "ALL"). |
+| page (optional) | number                                                                                   | page number (default: 1). |
 
 ```ts
 // Promise:
@@ -126,7 +126,7 @@ flixhq.fetchMovieByTopIMDB().then(data => console.log(data));
     console.log(data);
 })();
 ```
-returns a promise which resolves into an array of movies/tvseries. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L79-L85)*).
+returns a promise which resolves into an array of movies/tvseries. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L74-L80)*).
 
 ### fetchMovieInfo
 | Parameter | Type | Description |
@@ -143,7 +143,7 @@ flixhq.fetchMovieInfo("movie/watch-m3gan-91330").then(data => console.log(data))
     console.log(data);
 })();
 ```
-returns a promise which resolves into an object of movie info. (*[`Promise<IMovieInfo>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L96-L109)*).
+returns a promise which resolves into an object of movie info. (*[`Promise<IMovieInfo>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L91-L104)*).
 
 ### fetchEpisodeServers
 | Parameter | Type | Description |
@@ -161,14 +161,14 @@ flixhq.fetchEpisodeServers("movie/watch-m3gan-91330", "91330").then(data => cons
     console.log(data);
 })();
 ```
-returns a promise which resolves into an array of the servers info. (*[`Promise<IEpisodeServer>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L111-L115)*).
+returns a promise which resolves into an array of the servers info. (*[`Promise<IEpisodeServer>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L106-L110)*).
 
 ### fetchEpisodeSources
-| Parameter | Type | Description |
-| --------- | ---- | ----------- |
-| mediaId   | string | (*can be found in the media search results.*). |
-| episodeId | string | (*can be found in the media info results as shown on the above method*). |
-| server (optional) | [`StreamingServerStrings`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L22-L28) | Accept: "UpCloud" or "VidCloud" or "MixDrop" (default: "UpCloud"). |
+| Parameter | Type                                                                                              | Description |
+| --------- |---------------------------------------------------------------------------------------------------| ----------- |
+| mediaId   | string                                                                                            | (*can be found in the media search results.*). |
+| episodeId | string                                                                                            | (*can be found in the media info results as shown on the above method*). |
+| server (optional) | [`StreamingServers`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L19-L23) | Accept: "UpCloud" or "VidCloud" or "MixDrop" (default: "UpCloud"). |
 
 ```ts
 // Promsie:
@@ -198,7 +198,7 @@ flixhq.search("the last of us").then(data => console.log(data));
     console.log(data);
 })();
 ```
-returns a promise which resolves into an array of movies/tvseries. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L79-L85)*).
+returns a promise which resolves into an array of movies/tvseries. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L74-L80)*).
 
 ### fetchFiltersList
 ```ts
@@ -211,13 +211,13 @@ flixhq. fetchFiltersList().then(data => console.log(data));
     console.log(data);
 })();
 ```
-returns a promise which resolves into an object of filters info. (*[`Promise<IMovieFilter>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L147-L154)*).
+returns a promise which resolves into an object of filters info. (*[`Promise<IMovieFilter>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L142-L149)*).
 
 ### filter 
-| Parameter | Type | Description |
-| --------- | ---- | ----------- |
-| options   | [`IMovieFilter`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L147-L154) | (*Includes: type, quality, released, genre, country. Can be found in the filters list as shown on the above method.*) |
-| page (optional) | number | page number (default: 1). |
+| Parameter | Type                                                                                            | Description |
+| --------- |-------------------------------------------------------------------------------------------------| ----------- |
+| options   | [`IMovieFilter`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L142-L149) | (*Includes: type, quality, released, genre, country. Can be found in the filters list as shown on the above method.*) |
+| page (optional) | number                                                                                          | page number (default: 1). |
 
 ```ts
 // Promise:
@@ -231,4 +231,4 @@ flixhq.filter(options).then(data => console.log(data));
     console.log(data);
 })();
 ```
-returns a promise which resolves into an array of movies/tvseries. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L79-L85)*).
+returns a promise which resolves into an array of movies/tvseries. (*[`Promise<ISearch<IMovieResult>>`](https://github.com/shin202/flixhq-core/blob/main/src/types/types.ts#L74-L80)*).
