@@ -234,7 +234,7 @@ class FlixHQ {
         }
 
         try {
-            const { data } = await axios.get(`${this.baseUrl}/${MovieType}?page=${page}`);
+            const { data } = await axios.get(`${this.baseUrl}/${type}?page=${page}`);
             const $ = load(data);
 
             const navSelector = '.pre-pagination > nav > ul';
@@ -400,7 +400,7 @@ class FlixHQ {
         }
     }
 
-    fetchEpisodeSources = async (mediaId: string, episodeId: string, server: StreamingServers = StreamingServers.VidCloud): Promise<any> => {
+    fetchEpisodeSources = async (mediaId: string, episodeId: string, server: StreamingServers = StreamingServers.UpCloud): Promise<any> => {
         if (episodeId.startsWith('http')) {
             const serverUrl = new URL(episodeId);
 
