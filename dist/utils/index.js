@@ -45,7 +45,7 @@ const setMovieInfo = ($, movieInfo, baseUrl) => {
     movieInfo.type = movieInfo.id.split('/')[0] === 'movie' ? types_1.MovieType.MOVIE : types_1.MovieType.TVSERIES;
     movieInfo.country = {
         title: $('.m_i-d-content > .elements > .row-line:nth-child(1) > a').attr('title'),
-        url: $('.m_i-d-content > .elements > .row-line:nth-child(1) > a').attr('href').slice(1),
+        url: $('.m_i-d-content > .elements > .row-line:nth-child(1) > a').attr('href')?.slice(1),
     };
     movieInfo.genres = $('.m_i-d-content > .elements > .row-line:nth-child(2) > a')
         .map((_, el) => $(el).attr('title')).get();
