@@ -1,6 +1,22 @@
 import axios from "axios";
 import { AnyNode, Cheerio, CheerioAPI, load } from "cheerio";
-import { Filter, FilterStrings, ICountry, IEpisodeServer, IGenre, IHomeResult, IMovieEpisode, IMovieFilter, IMovieInfo, IMovieResult, IMovieSection, ISearch, ISlider, MovieReport, MovieType, MovieTypeStrings, StreamingServers, StreamingServersStrings } from "../../types/types";
+import {
+    Filter,
+    ICountry,
+    IEpisodeServer,
+    IGenre,
+    IHomeResult,
+    IMovieEpisode,
+    IMovieFilter,
+    IMovieInfo,
+    IMovieResult,
+    IMovieSection,
+    ISearch,
+    ISlider,
+    MovieReport,
+    MovieType,
+    StreamingServers
+} from "../../types/types";
 import { setMovieData, setMovieInfo } from "../../utils";
 import { MixDrop, VidCloud } from '../../extractors';
 
@@ -47,7 +63,7 @@ class FlixHQ {
     }
 
     private fetchMovieSections = ($: CheerioAPI, options: IMovieSection) => {
-        const { trendingMovies, trendingTVShows, latestTvShows, latestMovies, commingSoon } = options;
+        const { trendingMovies, trendingTVShows, latestTvShows, latestMovies, comingSoon } = options;
 
         const moviesListSelector = '.block_area-content.film_list > .film_list-wrap > .flw-item';
         const trendingMoviesSelector = `.tab-content > #trending-movies > ${moviesListSelector}`;
@@ -76,7 +92,7 @@ class FlixHQ {
 
                 case MovieReport.COMING_SOON:
                     $(el).find(moviesListSelector).each((_, el) => {
-                        commingSoon.push(setMovieData($(el), this.baseUrl));
+                        comingSoon.push(setMovieData($(el), this.baseUrl));
                     });
                     break;
 
@@ -96,19 +112,27 @@ class FlixHQ {
                 },
                 latestTvShows: [],
                 latestMovies: [],
-                commingSoon: [],
+                comingSoon: [],
             }
         };
-        const { slider, moviesSection: {
-            trending: {
-                trendingMovies,
-                trendingTVShows,
-            },
+        const {
+            slider, moviesSection: {
+                trending: {
+                    trendingMovies,
+                    trendingTVShows,
+                },
+                latestTvShows,
+                latestMovies,
+                comingSoon
+            }
+        } = homeResult;
+        const movieSections: IMovieSection = {
+            trendingMovies,
+            trendingTVShows,
             latestTvShows,
             latestMovies,
-            commingSoon
-        } } = homeResult;
-        const movieSections: IMovieSection = { trendingMovies, trendingTVShows, latestTvShows, latestMovies, commingSoon };
+            comingSoon: comingSoon
+        };
 
         try {
             const { data } = await axios.get(`${this.baseUrl}/home`);
@@ -166,13 +190,13 @@ class FlixHQ {
     }
 
     /**
-     * 
+     *
      * @param filterBy Type of the filter
      * @param query Query depend on the filter
      * @param page
-     * @returns 
+     * @returns
      */
-    fetchMovieByGenreOrCountry = async (filterBy: FilterStrings, query: string, page: number = 1): Promise<ISearch<IMovieResult>> => {
+    fetchMovieByGenreOrCountry = async (filterBy: Filter, query: string, page: number = 1): Promise<ISearch<IMovieResult>> => {
         const filterResult: ISearch<IMovieResult> = {
             currentPage: page,
             hasNextPage: false,
@@ -180,7 +204,7 @@ class FlixHQ {
         }
 
         try {
-            const { data } = await axios.get(`${this.baseUrl}/${Filter[filterBy]}/${query}?page=${page}`);
+            const { data } = await axios.get(`${this.baseUrl}/${filterBy}/${query}?page=${page}`);
             const $ = load(data);
 
             const navSelector = '.pre-pagination > nav > ul';
@@ -197,12 +221,12 @@ class FlixHQ {
     }
 
     /**
-     * 
+     *
      * @param type Type of the video (MOVIE or TVSERIES)
-     * @param page 
-     * @returns 
+     * @param page
+     * @returns
      */
-    fetchMovieByType = async (type: MovieTypeStrings, page: number = 1): Promise<ISearch<IMovieResult>> => {
+    fetchMovieByType = async (type: MovieType, page: number = 1): Promise<ISearch<IMovieResult>> => {
         const filterResult: ISearch<IMovieResult> = {
             currentPage: page,
             hasNextPage: false,
@@ -210,7 +234,7 @@ class FlixHQ {
         }
 
         try {
-            const { data } = await axios.get(`${this.baseUrl}/${MovieType[type]}?page=${page}`);
+            const { data } = await axios.get(`${this.baseUrl}/${MovieType}?page=${page}`);
             const $ = load(data);
 
             const navSelector = '.pre-pagination > nav > ul';
@@ -227,12 +251,12 @@ class FlixHQ {
     }
 
     /**
-     * 
+     *
      * @param type
-     * @param page 
-     * @returns 
+     * @param page
+     * @returns
      */
-    fetchMovieByTopIMDB = async (type?: MovieTypeStrings | 'ALL', page: number = 1): Promise<ISearch<IMovieResult>> => {
+    fetchMovieByTopIMDB = async (type: MovieType, page: number = 1): Promise<ISearch<IMovieResult>> => {
         const filterResult: ISearch<IMovieResult> = {
             currentPage: page,
             hasNextPage: false,
@@ -240,7 +264,7 @@ class FlixHQ {
         }
 
         try {
-            const { data } = await axios.get(`${this.baseUrl}/top-imdb?type=${type === 'ALL' ? 'all' : MovieType[type!]}&page=${page}`);
+            const { data } = await axios.get(`${this.baseUrl}/top-imdb?type=${type}&page=${page}`);
             const $ = load(data);
 
             const navSelector = '.pre-pagination > nav > ul';
@@ -259,9 +283,7 @@ class FlixHQ {
     private fetchTvShowSeasons = async (id: string): Promise<CheerioAPI> => {
         try {
             const { data } = await axios.get(`${this.baseUrl}/ajax/v2/tv/seasons/${id}`);
-            const $ = load(data);
-
-            return $;
+            return load(data);
         } catch (err) {
             throw new Error((err as Error).message);
         }
@@ -270,9 +292,7 @@ class FlixHQ {
     private fetchTvShowEpisodes = async (seasonsId: string): Promise<CheerioAPI> => {
         try {
             const { data } = await axios.get(`${this.baseUrl}/ajax/v2/season/episodes/${seasonsId}`);
-            const $ = load(data);
-
-            return $;
+            return load(data);
         } catch (err) {
             throw new Error((err as Error).message);
         }
@@ -297,13 +317,13 @@ class FlixHQ {
     private fetchTvShowSeasonInfo = async (uid: string, episodes: IMovieEpisode[]): Promise<void> => {
         const $ = await this.fetchTvShowSeasons(uid);
 
-        const seasondsIds = $('.slt-seasons-dropdown > .dropdown-menu > a')
+        const seasonIds = $('.slt-seasons-dropdown > .dropdown-menu > a')
             .map((_, el) => $(el)
                 .attr('data-id'))
             .get();
 
         let currentSeason = 1;
-        for (const id of seasondsIds) {
+        for (const id of seasonIds) {
             await this.fetchTvShowEpisodeInfo(id, currentSeason, episodes);
             currentSeason++;
         }
@@ -311,9 +331,9 @@ class FlixHQ {
 
     /**
      * Get Info of the video
-     * 
-     * @param mediaId 
-     * @returns 
+     *
+     * @param mediaId
+     * @returns
      */
     fetchMovieInfo = async (mediaId: string): Promise<IMovieInfo> => {
         const movieInfo: IMovieInfo = {
@@ -380,7 +400,7 @@ class FlixHQ {
         }
     }
 
-    fetchEpisodeSources = async (mediaId: string, episodeId: string, server: StreamingServersStrings = 'UpCloud'): Promise<any> => {
+    fetchEpisodeSources = async (mediaId: string, episodeId: string, server: StreamingServers = StreamingServers.VidCloud): Promise<any> => {
         if (episodeId.startsWith('http')) {
             const serverUrl = new URL(episodeId);
 
@@ -424,9 +444,7 @@ class FlixHQ {
 
             const i = servers.findIndex(s => s.name === server);
 
-            if (i === -1) {
-                throw new Error(`Server ${server} not found.`);
-            }
+            if (i === -1) throw new Error(`Server ${server} not found.`);
 
             // Send request to the streaming server to get the video url.
             const { data } = await axios.get(`${this.baseUrl}/ajax/sources/${servers[i].id}`);
