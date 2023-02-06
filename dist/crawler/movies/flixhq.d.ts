@@ -32,7 +32,7 @@ declare class FlixHQ {
      * @param page
      * @returns
      */
-    fetchMovieByTopIMDB: (type: MovieType, page?: number) => Promise<ISearch<IMovieResult>>;
+    fetchMovieByTopIMDB: (type?: MovieType, page?: number) => Promise<ISearch<IMovieResult>>;
     private fetchTvShowSeasons;
     private fetchTvShowEpisodes;
     private fetchTvShowEpisodeInfo;

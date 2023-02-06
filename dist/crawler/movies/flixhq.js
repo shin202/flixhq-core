@@ -203,7 +203,7 @@ class FlixHQ {
      * @param page
      * @returns
      */
-    fetchMovieByTopIMDB = async (type, page = 1) => {
+    fetchMovieByTopIMDB = async (type = types_1.MovieType.ALL, page = 1) => {
         const filterResult = {
             currentPage: page,
             hasNextPage: false,

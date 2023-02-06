@@ -256,7 +256,7 @@ class FlixHQ {
      * @param page
      * @returns
      */
-    fetchMovieByTopIMDB = async (type: MovieType, page: number = 1): Promise<ISearch<IMovieResult>> => {
+    fetchMovieByTopIMDB = async (type: MovieType = MovieType.ALL, page: number = 1): Promise<ISearch<IMovieResult>> => {
         const filterResult: ISearch<IMovieResult> = {
             currentPage: page,
             hasNextPage: false,
