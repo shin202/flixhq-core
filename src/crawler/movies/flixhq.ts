@@ -463,6 +463,8 @@ class FlixHQ {
             results: [],
         }
 
+        query = query.replaceAll(' ', '-');
+
         try {
             const { data } = await axios.get(`${this.baseUrl}/search/${query}?page=${page}`);
             const $ = load(data);

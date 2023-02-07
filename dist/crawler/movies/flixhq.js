@@ -382,6 +382,7 @@ class FlixHQ {
             hasNextPage: false,
             results: [],
         };
+        query = query.replaceAll(' ', '-');
         try {
             const { data } = await axios_1.default.get(`${this.baseUrl}/search/${query}?page=${page}`);
             const $ = (0, cheerio_1.load)(data);
