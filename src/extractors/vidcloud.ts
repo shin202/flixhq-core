@@ -1,4 +1,5 @@
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 import {IVideoResult} from '../types/types';
 import {isJson} from '../utils';
 
