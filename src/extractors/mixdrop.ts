@@ -8,7 +8,7 @@ class MixDrop {
     extract = async (videoUrl: URL) => {
         const videoResult: IVideoResult = {
             sources: [],
-            subtiles: []
+            subtitles: []
         }
 
         try {

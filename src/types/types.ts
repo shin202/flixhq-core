@@ -123,7 +123,7 @@ export interface ISubtile {
 
 export interface IVideoResult {
     sources: IVideo[],
-    subtiles: ISubtile[],
+    subtitles: ISubtile[],
 }
 
 export interface IMovieSection {
