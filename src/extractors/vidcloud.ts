@@ -27,26 +27,11 @@ class VidCloud {
             let sources = null;
 
             if (!isJson(data.sources)) {
-                let key = await (await axios.get('https://raw.githubusercontent.com/theonlymo/keys/e4/key')).data;
-
-                const sourcesArray = data.sources.split('');
-                let extractedKey = '';
-
-                let currentIndex = 0;
-                for (const index of key) {
-                    const start = index[0] + currentIndex;
-                    const end = start + index[1];
-                    for (let i = start; i < end; i++) {
-                        extractedKey += data.sources[i];
-                        sourcesArray[i] = '';
-                    }
-                    currentIndex += index[1];
-                }
-
-                key = extractedKey;
-                data.sources = sourcesArray.join('');
-                const decryptedVal = CryptoJS.AES.decrypt(data.sources, key).toString(CryptoJS.enc.Utf8);
-                sources = isJson(decryptedVal) ? JSON.parse(decryptedVal) : data.sources;
+                let keys = await (await axios.get('https://keys4.fun')).data["rabbitstream"]["keys"];
+                const keyString = btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(keys))));
+                const decryptedVal = CryptoJS.AES.decrypt(res.data.sources, keyString).toString(CryptoJS.enc.Utf8);
+                sources = JSON.parse(CryptoJS.AES.decrypt(res.data.sources, keyString).toString(CryptoJS.enc.Utf8));
+                sources = isJson(decryptedVal) ? JSON.parse(decryptedVal) : res.data.sources;
             }
 
             for (const source of sources) {
