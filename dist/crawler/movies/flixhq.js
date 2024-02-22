@@ -19,9 +19,11 @@ class FlixHQ {
             const image = $(el).attr('style')?.split(';')[0];
             const match = image.match(sliderImageRegex);
             const title = $(el).find('.film-title > a').attr('title');
+            const id = $(el).find('.film-title > a').attr('href');
             const movieDetail = $(el).find('.sc-detail > .scd-item');
             const movieGenre = $(movieDetail.get()[3]).find('a').get();
             slider.push({
+                id: url,
                 image: match[1],
                 title: title,
                 detail: {
